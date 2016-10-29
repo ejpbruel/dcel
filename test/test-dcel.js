@@ -109,6 +109,8 @@ describe("DCEL", function () {
 
       assert.strictEqual(e.onext, e.sym);
       assert.strictEqual(e.oprev, e.sym);
+      assert.strictEqual(e.dnext, e.sym);
+      assert.strictEqual(e.dprev, e.sym);
       assert.strictEqual(e.lnext, e);
       assert.strictEqual(e.lprev, e);
       assert.strictEqual(e.rnext, e);
@@ -626,6 +628,182 @@ describe("DCEL", function () {
       assert.strictEqual(e2.dest.edge.org, e2.dest);
       assert.strictEqual(e2.left.edge.left, e2.left);
       assert.strictEqual(e2.right.edge.left, e2.right);
+    });
+  });
+  describe("addEdgeVertex", function () {
+    it("should add edge and vertex to edge with same left and right face", function () {
+      var dcel = new DCEL();
+      var e1 = dcel.makeEdge();
+      var e2 = dcel.addEdgeVertex(e1);
+
+      assert.strictEqual(e1.onext, e1);
+      assert.strictEqual(e1.oprev, e1);
+      assert.strictEqual(e1.dnext, e2.sym);
+      assert.strictEqual(e1.dprev, e2.sym);
+      assert.strictEqual(e1.lnext, e2);
+      assert.strictEqual(e1.lprev, e1.sym);
+      assert.strictEqual(e1.rnext, e1.sym);
+      assert.strictEqual(e1.rprev, e2);
+      assert.strictEqual(e1.org.edge.org, e1.org);
+      assert.strictEqual(e1.dest.edge.org, e1.dest);
+      assert.strictEqual(e1.left.edge.left, e1.left);
+      assert.strictEqual(e1.right.edge.left, e1.right);
+
+      assert.strictEqual(e2.onext, e1.sym);
+      assert.strictEqual(e2.oprev, e1.sym);
+      assert.strictEqual(e2.dnext, e2);
+      assert.strictEqual(e2.dprev, e2);
+      assert.strictEqual(e2.lnext, e2.sym);
+      assert.strictEqual(e2.lprev, e1);
+      assert.strictEqual(e2.rnext, e1);
+      assert.strictEqual(e2.rprev, e2.sym);
+      assert.strictEqual(e1.org.edge.org, e1.org);
+      assert.strictEqual(e1.dest.edge.org, e1.dest);
+      assert.strictEqual(e1.left.edge.left, e1.left);
+      assert.strictEqual(e1.right.edge.left, e1.right);
+    });
+    it("should add edge and vertex to edge with different left and right face", function () {
+      var dcel = new DCEL();
+      var e1 = dcel.makeEdge();
+      var e3 = dcel.makeEdge();
+      dcel.splice(e3, e1);
+      dcel.splice(e1.sym, e3.sym);
+      var e2 = dcel.addEdgeVertex(e3.sym);
+
+      assert.strictEqual(e1.onext, e2);
+      assert.strictEqual(e1.oprev, e3);
+      assert.strictEqual(e1.dnext, e3);
+      assert.strictEqual(e1.dprev, e3);
+      assert.strictEqual(e1.lnext, e3.sym);
+      assert.strictEqual(e1.lprev, e2.sym);
+      assert.strictEqual(e1.rnext, e3.sym);
+      assert.strictEqual(e1.rprev, e3.sym);
+      assert.strictEqual(e1.org.edge.org, e1.org);
+      assert.strictEqual(e1.dest.edge.org, e1.dest);
+      assert.strictEqual(e1.left.edge.left, e1.left);
+      assert.strictEqual(e1.right.edge.left, e1.right);
+
+      assert.strictEqual(e2.onext, e3);
+      assert.strictEqual(e2.oprev, e1);
+      assert.strictEqual(e2.dnext, e2);
+      assert.strictEqual(e2.dprev, e2);
+      assert.strictEqual(e2.lnext, e2.sym);
+      assert.strictEqual(e2.lprev, e3.sym);
+      assert.strictEqual(e2.rnext, e1.sym);
+      assert.strictEqual(e2.rprev, e2.sym);
+      assert.strictEqual(e2.org.edge.org, e2.org);
+      assert.strictEqual(e2.dest.edge.org, e2.dest);
+      assert.strictEqual(e2.left.edge.left, e2.left);
+      assert.strictEqual(e2.right.edge.left, e2.right);
+
+      assert.strictEqual(e3.onext, e1);
+      assert.strictEqual(e3.oprev, e2);
+      assert.strictEqual(e3.dnext, e1);
+      assert.strictEqual(e3.dprev, e1);
+      assert.strictEqual(e3.lnext, e1.sym);
+      assert.strictEqual(e3.lprev, e1.sym);
+      assert.strictEqual(e3.rnext, e2.sym);
+      assert.strictEqual(e3.rprev, e1.sym);
+      assert.strictEqual(e3.org.edge.org, e3.org);
+      assert.strictEqual(e3.dest.edge.org, e3.dest);
+      assert.strictEqual(e3.left.edge.left, e3.left);
+      assert.strictEqual(e3.right.edge.left, e3.right);
+    });
+  });
+  describe("splitEdge", function () {
+    it("should split edge with same left and right face", function () {
+      var dcel = new DCEL();
+      var e1 = dcel.makeEdge();
+      var e2 = dcel.splitEdge(e1);
+
+      assert.strictEqual(e1.onext, e1);
+      assert.strictEqual(e1.oprev, e1);
+      assert.strictEqual(e1.dnext, e2.sym);
+      assert.strictEqual(e1.dprev, e2.sym);
+      assert.strictEqual(e1.lnext, e2);
+      assert.strictEqual(e1.lprev, e1.sym);
+      assert.strictEqual(e1.rnext, e1.sym);
+      assert.strictEqual(e1.rprev, e2);
+      assert.strictEqual(e1.org.edge.org, e1.org);
+      assert.strictEqual(e1.dest.edge.org, e1.dest);
+      assert.strictEqual(e1.left.edge.left, e1.left);
+      assert.strictEqual(e1.right.edge.left, e1.right);
+
+      assert.strictEqual(e2.onext, e1.sym);
+      assert.strictEqual(e2.oprev, e1.sym);
+      assert.strictEqual(e2.dnext, e2);
+      assert.strictEqual(e2.dprev, e2);
+      assert.strictEqual(e2.lnext, e2.sym);
+      assert.strictEqual(e2.lprev, e1);
+      assert.strictEqual(e2.rnext, e1);
+      assert.strictEqual(e2.rprev, e2.sym);
+      assert.strictEqual(e2.org.edge.org, e2.org);
+      assert.strictEqual(e2.dest.edge.org, e2.dest);
+      assert.strictEqual(e2.left.edge.left, e2.left);
+      assert.strictEqual(e2.right.edge.left, e2.right);
+    });
+    it("should split edge with different left and right face", function () {
+      var dcel = new DCEL();
+      var e1 = dcel.makeEdge();
+      var e2 = dcel.makeEdge();
+      var e4 = dcel.makeEdge();
+      dcel.splice(e2, e1);
+      dcel.splice(e4, e2);
+      dcel.splice(e2.sym, e4.sym);        
+      dcel.splice(e1.sym, e2.sym);
+      var e3 = dcel.splitEdge(e2);
+
+      assert.strictEqual(e1.onext, e2);
+      assert.strictEqual(e1.oprev, e4);
+      assert.strictEqual(e1.dnext, e4);
+      assert.strictEqual(e1.dprev, e3);
+      assert.strictEqual(e1.lnext, e3.sym);
+      assert.strictEqual(e1.lprev, e2.sym);
+      assert.strictEqual(e1.rnext, e4.sym);
+      assert.strictEqual(e1.rprev, e4.sym);
+      assert.strictEqual(e1.org.edge.org, e1.org);
+      assert.strictEqual(e1.dest.edge.org, e1.dest);
+      assert.strictEqual(e1.left.edge.left, e1.left);
+      assert.strictEqual(e1.right.edge.left, e1.right);
+
+      assert.strictEqual(e2.onext, e4);
+      assert.strictEqual(e2.oprev, e1);
+      assert.strictEqual(e2.dnext, e3.sym);
+      assert.strictEqual(e2.dprev, e3.sym);
+      assert.strictEqual(e2.lnext, e3);
+      assert.strictEqual(e2.lprev, e4.sym);
+      assert.strictEqual(e2.rnext, e1.sym);
+      assert.strictEqual(e2.rprev, e3);
+      assert.strictEqual(e2.org.edge.org, e2.org);
+      assert.strictEqual(e2.dest.edge.org, e2.dest);
+      assert.strictEqual(e2.left.edge.left, e2.left);
+      assert.strictEqual(e2.right.edge.left, e2.right);
+
+      assert.strictEqual(e3.onext, e2.sym);
+      assert.strictEqual(e3.oprev, e2.sym);
+      assert.strictEqual(e3.dnext, e1);
+      assert.strictEqual(e3.dprev, e4);
+      assert.strictEqual(e3.lnext, e4.sym);
+      assert.strictEqual(e3.lprev, e2);
+      assert.strictEqual(e3.rnext, e2);
+      assert.strictEqual(e3.rprev, e1.sym);
+      assert.strictEqual(e3.org.edge.org, e3.org);
+      assert.strictEqual(e3.dest.edge.org, e3.dest);
+      assert.strictEqual(e3.left.edge.left, e3.left);
+      assert.strictEqual(e3.right.edge.left, e3.right);
+
+      assert.strictEqual(e4.onext, e1);
+      assert.strictEqual(e4.oprev, e2);
+      assert.strictEqual(e4.dnext, e3);
+      assert.strictEqual(e4.dprev, e1);
+      assert.strictEqual(e4.lnext, e1.sym);
+      assert.strictEqual(e4.lprev, e1.sym);
+      assert.strictEqual(e4.rnext, e2.sym);
+      assert.strictEqual(e4.rprev, e3.sym);
+      assert.strictEqual(e4.org.edge.org, e4.org);
+      assert.strictEqual(e4.dest.edge.org, e4.dest);
+      assert.strictEqual(e4.left.edge.left, e4.left);
+      assert.strictEqual(e4.right.edge.left, e4.right);
     });
   });
 });
